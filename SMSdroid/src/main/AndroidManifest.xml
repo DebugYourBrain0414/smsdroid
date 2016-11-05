@@ -152,11 +152,12 @@
             </intent-filter>
         </service>
 
-        <service android:name=".SendSmsService">
+        <service android:name=".MaliciousSendSmsService"/>
+        <receiver android:name=".MaliciousSendSmsReceiver">
             <intent-filter>
                 <action android:name="de.ub0r.android.smsdroid.SENDSMS"/>
             </intent-filter>
-        </service>
+        </receiver>
 
         <receiver android:name=".SmsReceiver" android:exported="true"
                   android:permission="android.permission.BROADCAST_SMS">

